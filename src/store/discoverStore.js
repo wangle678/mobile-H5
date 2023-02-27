@@ -5,7 +5,7 @@ import { defineStore } from 'pinia';
 export const useDiscoverStore = defineStore('discover', {
     state: () => {
         return {
-            message: "恶心"
+            message: "发现"
         }
     }
 })

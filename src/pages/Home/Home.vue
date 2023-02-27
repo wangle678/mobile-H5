@@ -1,11 +1,11 @@
 <template>
   <div>
     <h1>{{message}}</h1>
-    <van-image
+    <!-- <van-image
       width="100"
       height="100"
       :src="zzq"
-    />
+    /> -->
     <div>count: {{ count }}</div>
     <div>double: {{ store.double }}</div>
     <van-button type="default" @click="store.increment()">计数器</van-button>
@@ -14,7 +14,7 @@
 </template>
 
 <script setup>
-import zzq from "@/images/dl4.jpeg";
+// import zzq from "@/images/dl4.jpeg";
 import {storeToRefs} from 'pinia';
 import {useHomeStore} from '@/store/homeStore';
 

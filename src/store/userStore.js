@@ -5,7 +5,7 @@ import { defineStore } from 'pinia';
 export const useUserStore = defineStore('user', {
     state: () => {
         return {
-            message: "呸！呕……"
+            message: "我的"
         }
     }
 })

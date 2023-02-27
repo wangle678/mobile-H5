@@ -5,7 +5,7 @@ import { defineStore } from 'pinia';
 export const useChatStore = defineStore('chat', {
     state: () => {
         return {
-            message: "下贱"
+            message: "消息"
         }
     }
 })

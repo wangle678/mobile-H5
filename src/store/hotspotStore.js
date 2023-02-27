@@ -5,7 +5,7 @@ import { defineStore } from 'pinia';
 export const useHotspotStore = defineStore('hotspot', {
     state: () => {
         return {
-            message: "张建超爱我"
+            message: "热点"
         }
     }
 })

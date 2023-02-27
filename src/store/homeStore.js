@@ -6,7 +6,7 @@ export const useHomeStore = defineStore('home', {
     state: () => {
         return {
             count: 0,
-            message: "我爱张建超"
+            message: "主页"
         }
     },
 
