@@ -2,7 +2,7 @@
     import {ref} from 'vue';
     const active = ref(0);
     const tabberList = ref([
-        {to: '/', icon: 'home-o', tabName: '首页'},
+        {to: '/home', icon: 'home-o', tabName: '首页'},
         {to: '/hotspot', icon: 'fire-o', tabName: '热点'},
         {to: '/discover', icon: 'search', tabName: '发现'},
         {to: '/chat', icon: 'chat-o', tabName: '消息'},

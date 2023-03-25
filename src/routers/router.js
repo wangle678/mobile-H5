@@ -1,27 +1,24 @@
 import {createRouter, createWebHashHistory} from 'vue-router';
 
 import TabBar from '../layout/TabBar.vue';
+import Login from '@/pages/Login/Login.vue';      /* 登录 */
 import Home from '../pages/Home/Home.vue';      /* 首页 */
 import Hotspot from '../pages/Hotspot/Hotspot.vue';     /* 热点 */
 import Discover from '../pages/Discover/Discover.vue';  /* 发现 */
 import Chat from '../pages/Chat/Chat.vue';      /* 消息 */
 import User from '../pages/User/User.vue';      /* 我的 */
-import Login from '@/pages/Login/Login.vue';      /* 登录 */
 
 const routes = [
     {
         path: '/',
         component: Login
-        // children: [
-        //     { path: '/', component: Home }
-        // ]
     },
     {
-        // path: '/',
-        // component: TabBar,
-        // children: [
-        //     { path: '/', component: Home }
-        // ]
+        path: '/home',
+        component: TabBar,
+        children: [
+            { path: '/home', component: Home }
+        ]
     },
     {
         path: '/hotspot',

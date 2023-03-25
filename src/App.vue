@@ -3,7 +3,31 @@
 </template>
 
 <script setup>
+import {
+  onBeforeMount
+} from 'vue';
+import {
+  useRouter
+} from "vue-router";
+import {
+  showToast
+} from 'vant';
 // import HelloWorld from './components/HelloWorld.vue'
+
+let isLogin = sessionStorage.getItem("isLogin");
+let router = useRouter();
+
+onBeforeMount(() => {
+  if (!JSON.parse(isLogin)) {
+    showToast({
+      message: "登录过期请重新登录"
+    });
+    router.replace({
+      path: "/"
+    })
+    sessionStorage.removeItem("isLogin");
+  }
+});
 </script>
 
 

@@ -1,5 +1,35 @@
+<template>
+  <div class="title">登录</div>
+
+  <van-form>
+    <van-cell-group class="input-box" inset>
+      <van-field
+        v-model="userName"
+        label="账号"
+        name="pattern"
+        placeholder="请输入手机号"
+        :rules="[{ pattern: userNamePattern, message: '请输入正确手机号' }]"
+      />
+      <van-field
+        v-model="userPassword"
+        label="密码"
+        name="pattern"
+        placeholder="请输入密码"
+        type="password"
+        :rules="[{ pattern: userPasswordPattern, message: '密码至少需要6位' }]"
+      />
+    </van-cell-group>
+  </van-form>
+
+  <div class="dis">
+    <button class="login-btn" @click="loginClick">登录</button>
+  </div>
+  <span class="tip">没有账号？<i>去注册</i></span>
+</template>
+
 <script setup>
 import { ref } from "vue";
+import { useRouter } from 'vue-router'
 import {
   showToast,
   showNotify,
@@ -10,6 +40,7 @@ import { account, password } from "../../utils/accountInfo";
 
 let userName = ref("");
 let userPassword = ref("");
+let router = useRouter();
 
 // 表单校验
 const userNamePattern = /^(13[0-9]|14[01456879]|15[0-35-9]|16[2567]|17[0-8]|18[0-9]|19[0-35-9])\d{8}$/;
@@ -26,13 +57,21 @@ function loginClick () {
     return;
   }
   loginReq(userName.value, userPassword.value).then((res) => {
-    showNotify({ type: 'success', message: res.message });
+    showNotify({
+      type: 'success',
+      message: res.message
+    });
     sessionStorage.setItem("isLogin", res.isLogin);
-  }).catch((err) => {
-    showNotify({ type: 'warning', message: err });
-  }).finally(() => {
     userName.value = "";
     userPassword.value = "";
+    router.replace({
+      path: "/home"
+    });
+  }).catch((err) => {
+    showNotify({
+      type: 'warning',
+      message: err
+    });
   });
 }
 
@@ -58,34 +97,6 @@ function loginReq (userName, userPassword) {
   });
 }
 </script>
-
-<template>
-  <div class="title">登录</div>
-
-  <van-form>
-    <van-cell-group class="input-box" inset>
-      <van-field
-        v-model="userName"
-        label="账号"
-        name="pattern"
-        placeholder="请输入手机号"
-        :rules="[{ pattern: userNamePattern, message: '请输入正确手机号' }]"
-      />
-      <van-field
-        v-model="userPassword"
-        label="密码"
-        name="pattern"
-        placeholder="请输入密码"
-        :rules="[{ pattern: userPasswordPattern, message: '密码至少需要6位' }]"
-      />
-    </van-cell-group>
-  </van-form>
-
-  <div class="dis">
-    <button class="login-btn" @click="loginClick">登录</button>
-  </div>
-  <span class="tip">没有账号？<i>去注册</i></span>
-</template>
 
 <style scoped>
 .title {
