@@ -14,22 +14,36 @@ export const useUserStore = defineStore('user', {
 export const useUserConfigList = defineStore('configList', () => {
     const list = ref([{
         key: 1,
-        configTitle: "检查更新"
+        configTitle: "检查更新",
+        iconName: "replay",
+        login: true
     }, {
         key: 2,
-        configTitle: "反馈"
+        configTitle: "反馈",
+        iconName: "edit",
+        login: true
     }, {
         key: 3,
-        configTitle: "夜间模式"
+        configTitle: "关于",
+        iconName: "info-o",
+        login: true
     }, {
         key: 4,
-        configTitle: "关于"
-    }, {
-        key: 5,
-        configTitle: "退出"
+        configTitle: "退出",
+        iconName: "revoke",
+        login: false
     }]);
 
+    function haveLoggedOn (bool) {
+        list.value.forEach(element => {
+            if (element.key == 4) {
+                element.login = bool;
+            }
+        });
+    }
+
     return {
-        list
+        list,
+        haveLoggedOn
     }
 });

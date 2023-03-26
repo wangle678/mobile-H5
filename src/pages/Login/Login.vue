@@ -1,4 +1,11 @@
 <template>
+  <van-nav-bar
+    title="登录"
+    left-text="返回"
+    left-arrow
+    @click-left="onClickLeft"
+  />
+  
   <div class="title">登录</div>
 
   <van-form>
@@ -29,7 +36,9 @@
 
 <script setup>
 import { ref } from "vue";
-import { useRouter } from 'vue-router'
+import {
+  useRouter
+} from 'vue-router'
 import {
   showToast,
   showNotify,
@@ -42,11 +51,14 @@ let userName = ref("");
 let userPassword = ref("");
 let router = useRouter();
 
-// 表单校验
+/* 表单校验 */
 const userNamePattern = /^(13[0-9]|14[01456879]|15[0-35-9]|16[2567]|17[0-8]|18[0-9]|19[0-35-9])\d{8}$/;
 const userPasswordPattern = /^(\d|\D){6,}$/;
 
-// 登录事件
+/* 返回 */
+const onClickLeft = () => history.back();
+
+/* 登录事件 */
 function loginClick () {
   if (!userName.value) {
     showToast("请输入账号");
@@ -61,11 +73,11 @@ function loginClick () {
       type: 'success',
       message: res.message
     });
-    sessionStorage.setItem("isLogin", res.isLogin);
+    sessionStorage.setItem("isLoginInfo", JSON.stringify(res));
     userName.value = "";
     userPassword.value = "";
     router.replace({
-      path: "/home"
+      path: "/user"
     });
   }).catch((err) => {
     showNotify({
@@ -90,7 +102,8 @@ function loginReq (userName, userPassword) {
         closeToast();
         resolve({
           message: "登录成功",
-          isLogin: true
+          isLogin: true,
+          headPortrait: "https://fastly.jsdelivr.net/npm/@vant/assets/cat.jpeg"
         });
       }
     }, 500);

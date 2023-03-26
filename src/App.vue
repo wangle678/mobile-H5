@@ -17,17 +17,17 @@ import {
 let isLogin = sessionStorage.getItem("isLogin");
 let router = useRouter();
 
-onBeforeMount(() => {
+/* onBeforeMount(() => {
   if (!JSON.parse(isLogin)) {
     showToast({
       message: "登录过期请重新登录"
     });
     router.replace({
-      path: "/"
+      path: "/home"
     })
     sessionStorage.removeItem("isLogin");
   }
-});
+}); */
 </script>
 
 

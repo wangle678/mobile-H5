@@ -1,43 +1,127 @@
 <template>
   <div class="head-portrait-box">
-    <div class="head-portrait">
+    <div class="head-portrait" @click="toLogin">
       <van-image
         round
         width="100%"
         height="100%"
-        src="https://fastly.jsdelivr.net/npm/@vant/assets/cat.jpeg"
+        :src="isLoginInfo?.isLogin ? isLoginInfo.headPortrait : ''"
       />
-      <div class="login-title" v-if="!isLogin">请登录</div>
+      <div class="login-title" v-if="!isLoginInfo?.isLogin">未登录</div>
     </div>
     <div class="dis">
-      <div class="collect">
+      <div class="collect dis">
         <van-icon name="star-o" />
+        <span>收藏</span>
       </div>
-      <div class="setting">
+      <div class="setting dis">
         <van-icon name="setting-o" />
+        <span>设置</span>
       </div>
     </div>
   </div>
-  <div v-for="item in configList.list" :key="item.key">{{ item.configTitle }}</div>
+
+  <template v-for="item in configList.list" :key="item.key">
+    <div class="list-box" @click="listClick(item.key)" v-if="item?.login">
+      <van-icon :name="item.iconName" />
+      {{ item.configTitle }}
+    </div>
+  </template>
 </template>
 
 <script setup>
-  import {useUserConfigList} from '@/store/userStore';
-  
+  import {
+    useRouter,
+    onBeforeRouteLeave
+  } from "vue-router";
+  import {
+    showConfirmDialog,
+    showLoadingToast,
+    closeToast,
+    showToast
+  } from 'vant';
+  import {
+    useUserConfigList
+  } from '@/store/userStore';
   import {
     ref,
-    onBeforeMount
+    onBeforeMount,
   } from "vue";
 
-  let isLogin = ref();
+  const router = useRouter();
+  let isLoginInfo = ref({});
   const configList = useUserConfigList();
+  const { haveLoggedOn } = configList;
+
+  onBeforeRouteLeave((to, from) => {
+    // 如果登录了就不继续导航
+    if (to.meta.requiresAuth && isLoginInfo?.isLogin) {
+      return false;
+    }
+  });
+
+  /* 去登陆 */
+  function toLogin() {
+    router.push({
+      path: "/login"
+    });
+  }
   
+  /* 列表项的点击事件 */
+  function listClick (key) {
+    if (key == 1) {
+      checkUpdate();
+    }
+    if (key == 4) {
+      logOut();
+    }
+  }
+
+  /* 检查更新 */
+  function checkUpdate() {
+    showLoadingToast({
+      duration: 0,
+      forbidClick: true,
+      message: '正在检查更新'
+    });
+    setTimeout(() => {
+      closeToast();
+      showToast("已是最新版本");
+    }, 2000);
+  }
+
+  /* 退出 */
+  function logOut () {
+    showConfirmDialog({
+      title: "退出登录",
+      message: "确定要退出登录吗",
+      beforeClose: (action) => {
+        return new Promise((resolve, reject) => {
+          if (action == "cancel") {
+            resolve(true);
+          } else {
+            setTimeout(() => {
+              sessionStorage.removeItem("isLoginInfo");
+              resolve(true);
+              location.reload();
+            }, 1000);
+          }
+        });
+      }
+    });
+  }
+  
+  /* 声明周期部分 */
   onBeforeMount(() => {
-    isLogin = sessionStorage.getItem("isLogin");
+    isLoginInfo = JSON.parse(sessionStorage.getItem("isLoginInfo"));
+    if (isLoginInfo?.isLogin) {
+      haveLoggedOn(true);
+    }
   });
 </script>
 
 <style scoped>
+/* 头像部分 开始 */
 .head-portrait-box {
   position: relative;
   padding-top: 0.1px;
@@ -77,10 +161,16 @@
   width: 50%;
   height: 100%;
   text-align: center;
-  line-height: 7rem;
+  /* line-height: 7rem; */
   font-size: 2.5rem;
   opacity: 1;
   color: var(--van-black);
+  flex-direction: column;
+  justify-content: center;
+}
+
+.head-portrait-box > div:nth-child(2) div span {
+  font-size: 1.6rem;
 }
 
 .head-portrait-box > div:nth-child(2) .setting {
@@ -93,4 +183,18 @@
   font-size: 1.5rem;
   color: #fff;
 }
+/* 头像部分 结束 */
+
+/* 列表部分 开始 */
+.list-box {
+  font-size: 1.8rem;
+  padding: 1rem 2rem;
+  border-bottom: 1px solid var(--van-gray-3);
+  color: rgba(0, 0, 0, 0.7);
+}
+
+.list-box .van-icon {
+  margin-right: 1rem;
+}
+/* 列表部分 结束 */
 </style>

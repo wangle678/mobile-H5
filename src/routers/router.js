@@ -10,8 +10,15 @@ import User from '../pages/User/User.vue';      /* 我的 */
 
 const routes = [
     {
-        path: '/',
-        component: Login
+        path: "/",
+        redirect: "/home"
+    },
+    {
+        path: '/login',
+        component: Login,
+        meta: {
+            requiresAuth: true
+        }
     },
     {
         path: '/home',
