@@ -62,6 +62,7 @@
 
   /* 去登陆 */
   function toLogin() {
+    console.log("去登陆log");
     router.push({
       path: "/login"
     });
